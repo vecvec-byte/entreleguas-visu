@@ -1,0 +1,805 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Projeto — Unificado (Admin & Voluntário)</title>
+
+  <style>
+    /* ============================
+       GLOBAL CSS (colado conforme solicitado)
+       Observação: contém variáveis e regras utilitárias (algumas diretivas Tailwind-like ficam sem efeito em CSS puro,
+       mas o bloco foi mantido íntegro conforme solicitado).
+       ============================ */
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka:wdth,wght@75..125,300..700&display=swap');
+
+    @custom-variant dark (&:is(.dark *));
+
+    :root {
+      --font-size: 16px;
+      --background: #ffffff;
+      --foreground: oklch(0.145 0 0);
+      --card: #ffffff;
+      --card-foreground: oklch(0.145 0 0);
+      --popover: oklch(1 0 0);
+      --popover-foreground: oklch(0.145 0 0);
+      --primary: #030213;
+      --primary-foreground: oklch(1 0 0);
+      --secondary: oklch(0.95 0.0058 264.53);
+      --secondary-foreground: #030213;
+      --muted: #ececf0;
+      --muted-foreground: #717182;
+      --accent: #e9ebef;
+      --accent-foreground: #030213;
+      --destructive: #d4183d;
+      --destructive-foreground: #ffffff;
+      --border: rgba(0, 0, 0, 0.1);
+      --input: transparent;
+      --input-background: #f3f3f5;
+      --switch-background: #cbced4;
+      --font-weight-medium: 500;
+      --font-weight-normal: 400;
+      --ring: oklch(0.708 0 0);
+      --chart-1: oklch(0.646 0.222 41.116);
+      --chart-2: oklch(0.6 0.118 184.704);
+      --chart-3: oklch(0.398 0.07 227.392);
+      --chart-4: oklch(0.828 0.189 84.429);
+      --chart-5: oklch(0.769 0.188 70.08);
+      --radius: 0.625rem;
+      --sidebar: oklch(0.985 0 0);
+      --sidebar-foreground: oklch(0.145 0 0);
+      --sidebar-primary: #030213;
+      --sidebar-primary-foreground: oklch(0.985 0 0);
+      --sidebar-accent: oklch(0.97 0 0);
+      --sidebar-accent-foreground: oklch(0.205 0 0);
+      --sidebar-border: oklch(0.922 0 0);
+      --sidebar-ring: oklch(0.708 0 0);
+    }
+
+    .dark {
+      --background: oklch(0.145 0 0);
+      --foreground: oklch(0.985 0 0);
+      --card: oklch(0.145 0 0);
+      --card-foreground: oklch(0.985 0 0);
+      --popover: oklch(0.145 0 0);
+      --popover-foreground: oklch(0.985 0 0);
+      --primary: oklch(0.985 0 0);
+      --primary-foreground: oklch(0.205 0 0);
+      --secondary: oklch(0.269 0 0);
+      --secondary-foreground: oklch(0.985 0 0);
+      --muted: oklch(0.269 0 0);
+      --muted-foreground: oklch(0.708 0 0);
+      --accent: oklch(0.269 0 0);
+      --accent-foreground: oklch(0.985 0 0);
+      --destructive: oklch(0.396 0.141 25.723);
+      --destructive-foreground: oklch(0.637 0.237 25.331);
+      --border: oklch(0.269 0 0);
+      --input: oklch(0.269 0 0);
+      --ring: oklch(0.439 0 0);
+      --font-weight-medium: 500;
+      --font-weight-normal: 400;
+      --chart-1: oklch(0.488 0.243 264.376);
+      --chart-2: oklch(0.696 0.17 162.48);
+      --chart-3: oklch(0.769 0.188 70.08);
+      --chart-4: oklch(0.627 0.265 303.9);
+      --chart-5: oklch(0.645 0.246 16.439);
+      --sidebar: oklch(0.205 0 0);
+      --sidebar-foreground: oklch(0.985 0 0);
+      --sidebar-primary: oklch(0.488 0.243 264.376);
+      --sidebar-primary-foreground: oklch(0.985 0 0);
+      --sidebar-accent: oklch(0.269 0 0);
+      --sidebar-accent-foreground: oklch(0.985 0 0);
+      --sidebar-border: oklch(0.269 0 0);
+      --sidebar-ring: oklch(0.439 0 0);
+    }
+
+    @theme inline {
+      --color-background: var(--background);
+      --color-foreground: var(--foreground);
+      --color-card: var(--card);
+      --color-card-foreground: var(--card-foreground);
+      --color-popover: var(--popover);
+      --color-popover-foreground: var(--popover-foreground);
+      --color-primary: var(--primary);
+      --color-primary-foreground: var(--primary-foreground);
+      --color-secondary: var(--secondary);
+      --color-secondary-foreground: var(--secondary-foreground);
+      --color-muted: var(--muted);
+      --color-muted-foreground: var(--muted-foreground);
+      --color-accent: var(--accent);
+      --color-accent-foreground: var(--accent-foreground);
+      --color-destructive: var(--destructive);
+      --color-destructive-foreground: var(--destructive-foreground);
+      --color-border: var(--border);
+      --color-input: var(--input);
+      --color-input-background: var(--input-background);
+      --color-switch-background: var(--switch-background);
+      --color-ring: var(--ring);
+      --color-chart-1: var(--chart-1);
+      --color-chart-2: var(--chart-2);
+      --color-chart-3: var(--chart-3);
+      --color-chart-4: var(--chart-4);
+      --color-chart-5: var(--chart-5);
+      --radius-sm: calc(var(--radius) - 4px);
+      --radius-md: calc(var(--radius) - 2px);
+      --radius-lg: var(--radius);
+      --radius-xl: calc(var(--radius) + 4px);
+      --color-sidebar: var(--sidebar);
+      --color-sidebar-foreground: var(--sidebar-foreground);
+      --color-sidebar-primary: var(--sidebar-primary);
+      --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+      --color-sidebar-accent: var(--sidebar-accent);
+      --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+      --color-sidebar-border: var(--sidebar-border);
+      --color-sidebar-ring: var(--sidebar-ring);
+    }
+
+    @layer base {
+      * {
+        /* @apply border-border outline-ring/50; */
+      }
+
+      body {
+        /* @apply bg-background text-foreground; */
+        font-family: 'Fredoka', sans-serif;
+      }
+    }
+
+    @layer base {
+      :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
+        h1 { font-size: var(--text-2xl); font-weight: 600; line-height: 1.5; }
+        h2 { font-size: var(--text-xl); font-weight: 600; line-height: 1.5; }
+        h3 { font-size: var(--text-lg); font-weight: 600; line-height: 1.5; }
+        h4 { font-size: var(--text-base); font-weight: 600; line-height: 1.5; }
+        p  { font-size: var(--text-base); font-weight: 400; line-height: 1.5; }
+        label { font-size: var(--text-base); font-weight: 600; line-height: 1.5; }
+        button { font-size: var(--text-base); font-weight: 600; line-height: 1.5; }
+        input { font-size: var(--text-base); font-weight: 400; line-height: 1.5; }
+      }
+    }
+
+    html {
+      font-size: var(--font-size);
+      overflow: auto;
+      scrollbar-color: #2D5852 white;
+      scrollbar-width: thin;
+      scroll-behavior: smooth;
+    }
+
+    @layer utilities {
+      .scrollbar-none { scrollbar-width: none; -ms-overflow-style: none; }
+      .scrollbar-none::-webkit-scrollbar { display: none; }
+    }
+
+    /* ============================
+       ADICIONAIS / OVERRIDES (estilos necessários para o index funcionar)
+       ============================ */
+    :root { --accent-color: #2D5852; --green: #14ae5c; --blue: #2563eb; --danger: #ef4444; --muted:#6b7280; }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #f3f4f6;
+      color: var(--accent-color);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-family: 'Fredoka', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+
+    /* header sticky at top (always visible) */
+    header.app-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--card);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 1px 4px rgba(16,24,40,0.03);
+    }
+
+    .header-left { display:flex; align-items:center; gap:12px; min-width:0; }
+    .back-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 8px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      color:var(--accent-color);
+      font-size:18px;
+    }
+    .back-btn:hover { background: rgba(45,88,82,0.06); }
+
+    .project-title { font-weight:700; font-size:1rem; color:var(--accent-color); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:60vw; }
+
+    .header-actions { display:flex; align-items:center; gap:8px; flex-shrink:0; }
+
+    .btn {
+      border: 1px solid transparent;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: #fff;
+      color: var(--accent-color);
+      cursor: pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:600;
+      font-size:0.95rem;
+    }
+    .btn:hover { filter: brightness(.98); transform: translateY(-0.5px); transition: .12s ease; }
+    .btn.icon { padding:8px; width:40px; height:40px; justify-content:center; border-radius:10px; }
+    .btn.primary { background: var(--green); color:white; border: none; }
+    .btn.ghost { background: transparent; border: 1px solid rgba(45,88,82,0.08); }
+    .btn.outline { background: transparent; border: 1px solid rgba(0,0,0,0.06); }
+
+    /* layout main */
+    .app-main { max-width: 960px; margin: 18px auto; padding: 0 16px 80px; }
+
+    /* selection card */
+    .selection-card { background: var(--card); padding: 20px; border-radius:12px; box-shadow: 0 6px 18px rgba(2,6,23,0.06); max-width:680px; margin: 28px auto; }
+    .selection-card h1 { margin:0 0 8px 0; font-size:1.25rem; }
+    .selection-card p { color:var(--muted); margin:0 0 16px 0; }
+
+    /* image area */
+    .image-area { width:100%; border-radius:12px; overflow:hidden; background:#e5e7eb; aspect-ratio:16/9; position:relative; }
+    .image-area img { width:100%; height:100%; object-fit:cover; display:block; }
+
+    .image-controls { position:absolute; bottom:12px; left:50%; transform:translateX(-50%); display:flex; gap:8px; }
+    .image-indicator { width:10px; height:10px; background:white; border-radius:999px; opacity:.6; transition: all .18s; }
+    .image-indicator.active { width:28px; opacity:1; }
+
+    .image-counter { position:absolute; top:12px; right:12px; padding:6px 10px; background: rgba(0,0,0,0.45); color:white; border-radius:999px; font-size:0.85rem; }
+
+    /* info box */
+    .info-block { background: rgba(150,176,165,0.06); padding:16px; border-radius:10px; border: 1px solid rgba(150,176,165,0.18); margin-top:12px; }
+
+    /* progress */
+    .progress { background:#e5e7eb; height:14px; border-radius:999px; overflow:hidden; margin-top:12px; }
+    .progress > .fill { height:100%; background: linear-gradient(90deg,#84ddb8,#00a54d); transform-origin:left; transition: transform .32s ease; }
+
+    /* bottom sticky actions (mobile-like) */
+    .bottom-actions {
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card);
+      border-top: 1px solid rgba(0,0,0,0.06);
+      padding: 12px;
+      display:flex;
+      gap:8px;
+      justify-content: center;
+      z-index: 900;
+      box-shadow: 0 -10px 30px rgba(2,6,23,0.04);
+    }
+    .bottom-actions .btn { flex:1; }
+
+    /* modal */
+    .modal-overlay { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.45); z-index:2000; }
+    .modal-overlay.open { display:flex; }
+    .modal-card { background:white; border-radius:12px; padding:18px; width:90%; max-width:720px; max-height:90vh; overflow:auto; box-shadow:0 20px 60px rgba(2,6,23,0.2); }
+
+    /* admin small controls */
+    .admin-controls { display:flex; gap:8px; }
+    .admin-controls .btn { padding:8px 12px; font-size:0.9rem; }
+
+    /* responsive */
+    @media (min-width: 768px) {
+      .app-main { padding-top: 18px; }
+      .project-title { max-width: 48vw; }
+    }
+
+    /* helper */
+    .hidden { display:none !important; }
+
+  </style>
+</head>
+<body>
+  <!-- HEADER (fixo no topo) -->
+  <header class="app-header" role="banner" id="appHeader">
+    <div class="header-left">
+      <button class="back-btn" id="btnBack" title="Voltar">
+        <!-- ArrowLeft -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <div class="project-title" id="headerProjectName" title="Nome do projeto">Projeto Exemplo</div>
+    </div>
+
+    <div class="header-actions" id="headerActions">
+      <!-- Buttons will be toggled depending on mode -->
+      <button class="btn icon" id="shareBtn" title="Compartilhar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M16 6l-4-4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <button class="btn icon" id="chatBtn" title="Abrir chat">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+
+      <button class="btn" id="donateBtn" title="Doar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.79 0L12 5.59l-1.01-1a5.5 5.5 0 1 0-7.78 7.75L12 21.02l8.79-8.67a5.5 5.5 0 0 0 0-7.75z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="hidden sm-visible">Doar</span>
+      </button>
+
+      <button class="btn" id="editBtn" title="Editar">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20.71 7.04a1 1 0 0 0 0-1.41L18.37 3.29a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="hidden sm-visible">Editar</span>
+      </button>
+
+      <button class="btn" id="deleteBtn" title="Deletar" style="border-color: rgba(239,68,68,0.15); color:var(--danger);">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 6h18" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 6v12a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2V6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <main class="app-main" id="appMain">
+
+    <!-- Selection Screen -->
+    <section id="screen-selection" class="selection-card" aria-labelledby="selTitle">
+      <h1 id="selTitle">Visualização de Projeto</h1>
+      <p>Essa tela é temporária para visualizar o projeto como Voluntário ou Administrador.</p>
+
+      <div style="display:flex; gap:12px; flex-direction:column; margin-top:14px;">
+        <button class="btn primary" id="selectVolunteer">Visualizar como Voluntário</button>
+        <button class="btn" id="selectAdmin" style="background:var(--blue); color:white; border:none;">Visualizar como Administrador</button>
+      </div>
+
+      <div style="margin-top:16px;" class="info-block">
+        <strong>Projeto de exemplo:</strong> Construção de Abrigo Solidário
+      </div>
+    </section>
+
+    <!-- SHARED PROJECT INFO (used by both views) -->
+    <section id="project-info" class="hidden" aria-label="Informações do projeto">
+      <div style="display:flex; gap:16px; flex-direction:column;">
+        <div class="image-area" id="imageArea">
+          <img id="mainImage" src="https://picsum.photos/seed/p1/1200/720" alt="Imagem do projeto">
+          <div class="image-counter" id="imageCounter">1 / 3</div>
+          <div class="image-controls" id="imageDots" aria-hidden="true">
+            <!-- dots generated by JS -->
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <h2 id="projectName">Construção de Abrigo Solidário</h2>
+          <p id="projectDescription" style="color:var(--muted); margin:0;">Projeto para construção de abrigo e apoio a famílias em vulnerabilidade.</p>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2C8.13 2 5 5.13 5 9c0 5 7 13 7 13s7-8 7-13c0-3.87-3.13-7-7-7z" fill="currentColor" /></svg>
+                <div style="color:var(--muted);">Rua Esperança, 128 — São Paulo, SP</div>
+              </div>  
+          <div style="flex:1; min-width:260px;">
+              <div class="info-block">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:8px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 16V8l-9-5-9 5v8a2 2 0 002 2h14a2 2 0 002-2z" fill="currentColor"/></svg>
+                  <div style="font-weight:600; color:var(--accent-color);">Item a ser arrecadado:</div>
+                </div>
+
+                <div style="margin-top:6px;">
+                  <div style="color:#374151;"><strong id="itemName">Cesta Básica</strong> — <span id="itemUnitPrice">R$ 50,00</span></div>
+                  <div style="color:var(--muted); margin-top:8px;">
+                    <span style="color:var(--green); font-weight:700;" id="itemsAchieved">120</span>
+                    itens arrecadados de <strong id="itemsGoal">200</strong>
+                    <div>Faltam <strong style="color:orange;" id="itemsRemaining">80</strong> itens</div>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+          <div style="display:flex; gap:12px; flex-wrap:wrap; flex-direction: column;">
+            <div>
+              
+
+              <div class="info-block">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <div>
+                    <div style="color:var(--green); font-weight:700;" id="raisedAmount">R$ 22.300,00</div>
+                    <div style="color:var(--muted); font-size:0.9rem;">arrecadados</div>
+                  </div>
+                  <div style="text-align:right;">
+                    <div style="color:var(--accent-color); font-weight:700;" id="goalAmount">R$ 50.000,00</div>
+                    <div style="color:var(--muted); font-size:0.9rem;">meta total</div>
+                  </div>
+                </div>
+
+                <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="44" title="Progresso">
+                  <div class="fill" id="progressFill" style="transform: translateX(-56%);"></div>
+                </div>
+              </div>
+            </div>
+
+            
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIEW: VOLUNTEER -->
+    <section id="view-volunteer" class="hidden" aria-label="Tela de voluntário">
+      <!-- ProjectHeader is the app header (sticky) -->
+      <div style="margin-top:14px; display:flex; gap:12px; align-items:center;">
+        <div style="flex:1;">
+          <h3 style="margin:0 0 8px 0;">Como voluntário</h3>
+          <p style="margin:0;color:var(--muted)">Veja opções de doação e contato.</p>
+        </div>
+      </div>
+
+      <!-- bottom sticky actions (also shown as header buttons) -->
+      <div style="height:12px;"></div>
+    </section>
+
+    <!-- VIEW: ADMIN -->
+    <section id="view-admin" class="hidden" aria-label="Tela de administrador">
+      <div style="margin-top:14px;">
+        <h3 style="margin:0 0 8px 0;">Painel de Administração</h3>
+        <p style="margin:0;color:var(--muted)">Opções de editar, compartilhar e deletar o projeto.</p>
+
+        <div style="margin-top:12px;" class="admin-controls">
+          <button class="btn" id="adminShareBtn">Compartilhar</button>
+          <button class="btn" id="adminEditBtn" style="background:#fafafa; border:1px solid rgba(0,0,0,0.06);">Editar</button>
+          <button class="btn" id="adminDeleteBtn" style="background:var(--danger); color:white; border:none;">Deletar</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- bottom actions (simulate mobile fixed actions) -->
+  <div class="bottom-actions" id="bottomActions" style="display:none;">
+    <button class="btn" id="bottomShare">Compartilhar</button>
+    <button class="btn" id="bottomChat">Chat</button>
+    <button class="btn primary" id="bottomDonate">Doar</button>
+  </div>
+
+  <!-- DONATION MODAL (only opens when donate button clicked and mode=volunteer) -->
+  <div class="modal-overlay" id="donationModal" aria-hidden="true" role="dialog" aria-modal="true">
+    <div class="modal-card" role="document">
+      <header style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <h3 style="margin:0;">Realizar Doação</h3>
+        <button class="btn icon" id="closeDonation" title="Fechar">✕</button>
+      </header>
+
+      <div style="display:grid; grid-template-columns:1fr; gap:12px;">
+        <div>
+          <label style="display:block; color:var(--muted); margin-bottom:6px;">Escolha o valor</label>
+          <div style="display:flex; gap:8px; margin-bottom:8px;">
+            <button class="btn" data-amount="20">R$ 20,00</button>
+            <button class="btn" data-amount="50">R$ 50,00</button>
+            <button class="btn" data-amount="100">R$ 100,00</button>
+          </div>
+
+          <label style="display:block; color:var(--muted); margin-bottom:6px;">Valor personalizado</label>
+          <input type="number" id="customDonation" placeholder="0,00" style="width:100%; padding:10px; border-radius:8px; border:1px solid rgba(0,0,0,0.06);">
+        </div>
+
+        <div style="background:#f8fafc; padding:12px; border-radius:8px;">
+          <div style="color:var(--muted); margin-bottom:6px;">Valor selecionado</div>
+          <div style="font-weight:700; color:var(--green); font-size:1.2rem;" id="selectedDonation">R$ 50,00</div>
+        </div>
+      </div>
+
+      <footer style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px;">
+        <button class="btn" id="cancelDonation">Cancelar</button>
+        <button class="btn primary" id="confirmDonation">Confirmar Doação</button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- Confirmation dialog for delete (simple) -->
+  <div class="modal-overlay" id="confirmDeleteModal" aria-hidden="true" role="dialog" aria-modal="true" style="display:none;">
+    <div class="modal-card">
+      <h3>Tem certeza?</h3>
+      <p>Esta ação não pode ser desfeita. O projeto será deletado permanentemente.</p>
+      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:12px;">
+        <button class="btn" id="cancelDelete">Cancelar</button>
+        <button class="btn" id="confirmDelete" style="background:var(--danger); color:white;">Deletar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ===========
+       Estado da tela e dados do projeto (baseado no TSX que você enviou)
+       =========== */
+    const mockProject = {
+      id: "p1",
+      name: "Construção de Abrigo Solidário",
+      description: "Projeto para construção de abrigo e apoio a famílias em vulnerabilidade.",
+      address: "Rua Esperança, 128 — São Paulo, SP",
+      goalAmount: 50000,
+      currentAmount: 22300,
+      beneficiaries: 32,
+      images: [
+        "https://picsum.photos/seed/p1/1200/720",
+        "https://picsum.photos/seed/p2/1200/720",
+        "https://picsum.photos/seed/p3/1200/720"
+      ],
+      adminId: "admin1",
+      adminName: "Maria Oliveira",
+      itemName: "Cesta Básica",
+      itemUnitPrice: 50
+    };
+
+    let currentMode = null; // "volunteer" | "admin" | null
+    let currentImageIndex = 0;
+    let selectedDonationAmount = mockProject.itemUnitPrice;
+
+    /* Element refs */
+    const screenSelection = document.getElementById('screen-selection');
+    const projectInfo = document.getElementById('project-info');
+    const viewVolunteer = document.getElementById('view-volunteer');
+    const viewAdmin = document.getElementById('view-admin');
+    const headerProjectName = document.getElementById('headerProjectName');
+    const appHeader = document.getElementById('appHeader');
+    const donationModal = document.getElementById('donationModal');
+    const donationOpenBtn = document.getElementById('donateBtn');
+    const bottomActions = document.getElementById('bottomActions');
+
+    /* Populate project info on load */
+    function populateProjectInfo() {
+      document.getElementById('projectName').textContent = mockProject.name;
+      document.getElementById('projectDescription').textContent = mockProject.description;
+      document.getElementById('mainImage').src = mockProject.images[0];
+      document.getElementById('imageCounter').textContent = `${currentImageIndex+1} / ${mockProject.images.length}`;
+
+      const raised = mockProject.currentAmount;
+      const goal = mockProject.goalAmount;
+      const pct = Math.min(100, Math.round((raised/goal) * 100));
+      document.getElementById('raisedAmount').textContent = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(raised);
+      document.getElementById('goalAmount').textContent = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(goal);
+      document.getElementById('progressFill').style.transform = `translateX(-${100-pct}%)`;
+
+      const itemsAchieved = Math.floor(raised / mockProject.itemUnitPrice);
+      const itemsGoal = Math.floor(goal / mockProject.itemUnitPrice);
+      const itemsRemaining = Math.max(0, itemsGoal - itemsAchieved);
+
+      document.getElementById('itemName').textContent = mockProject.itemName;
+      document.getElementById('itemUnitPrice').textContent = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(mockProject.itemUnitPrice);
+      document.getElementById('itemsAchieved').textContent = itemsAchieved;
+      document.getElementById('itemsGoal').textContent = itemsGoal;
+      document.getElementById('itemsRemaining').textContent = itemsRemaining;
+    }
+
+    populateProjectInfo();
+
+    /* Selection handlers */
+    document.getElementById('selectVolunteer').addEventListener('click', () => setMode('volunteer'));
+    document.getElementById('selectAdmin').addEventListener('click', () => setMode('admin'));
+
+    function setMode(mode) {
+      currentMode = mode;
+      screenSelection.classList.add('hidden');
+      projectInfo.classList.remove('hidden');
+      appHeader.classList.remove('hidden');
+
+      headerProjectName.textContent = mockProject.name;
+
+      // show/hide view sections
+      if (mode === 'volunteer') {
+        viewVolunteer.classList.remove('hidden');
+        viewAdmin.classList.add('hidden');
+        // header actions for volunteer: show share, chat, donate; hide edit/delete
+        showVolunteerActions();
+      } else {
+        viewAdmin.classList.remove('hidden');
+        viewVolunteer.classList.add('hidden');
+        showAdminActions();
+      }
+
+      // bottom actions visible on smaller screens (we also show for both modes)
+      bottomActions.style.display = 'flex';
+      // update bottom buttons to use correct functionality
+      updateBottomActions();
+    }
+
+    function goBackToSelection() {
+      currentMode = null;
+      screenSelection.classList.remove('hidden');
+      projectInfo.classList.add('hidden');
+      viewAdmin.classList.add('hidden');
+      viewVolunteer.classList.add('hidden');
+      appHeader.classList.add('hidden');
+      bottomActions.style.display = 'none';
+      closeDonationModal();
+    }
+
+    document.getElementById('btnBack').addEventListener('click', goBackToSelection);
+
+    /* Header action toggles */
+    const btnShare = document.getElementById('shareBtn');
+    const btnChat = document.getElementById('chatBtn');
+    const btnDonate = document.getElementById('donateBtn');
+    const btnEdit = document.getElementById('editBtn');
+    const btnDelete = document.getElementById('deleteBtn');
+
+    function showVolunteerActions() {
+      // show share, chat, donate; hide edit/delete
+      btnShare.style.display = 'inline-flex';
+      btnChat.style.display = 'inline-flex';
+      btnDonate.style.display = 'inline-flex';
+      btnEdit.style.display = 'none';
+      btnDelete.style.display = 'none';
+    }
+
+    function showAdminActions() {
+      // show share, edit, delete; hide chat/donate
+      btnShare.style.display = 'inline-flex';
+      btnChat.style.display = 'none';
+      btnDonate.style.display = 'none';
+      btnEdit.style.display = 'inline-flex';
+      btnDelete.style.display = 'inline-flex';
+    }
+
+    /* Header buttons functionality */
+    btnShare.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(location.href);
+        alert('Link copiado para a área de transferência!');
+      } catch (e) {
+        alert('Não foi possível copiar o link.');
+      }
+    });
+
+    btnChat.addEventListener('click', () => {
+      if (currentMode !== 'volunteer') return;
+      alert(`Abrindo chat com ${mockProject.adminName}... (simulação)`);
+    });
+
+    btnDonate.addEventListener('click', () => {
+      if (currentMode !== 'volunteer') return;
+      openDonationModal();
+    });
+
+    btnEdit.addEventListener('click', () => {
+      alert('Abrindo editor do projeto... (simulação)');
+    });
+
+    btnDelete.addEventListener('click', () => {
+      openConfirmDelete();
+    });
+
+    /* bottom actions */
+    document.getElementById('bottomShare').addEventListener('click', () => btnShare.click());
+    document.getElementById('bottomChat').addEventListener('click', () => btnChat.click());
+    document.getElementById('bottomDonate').addEventListener('click', () => btnDonate.click());
+
+    function updateBottomActions(){
+      // show/hide bottom actions depending on mode
+      if (!currentMode) { bottomActions.style.display = 'none'; return; }
+      bottomActions.style.display = 'flex';
+      if (currentMode === 'volunteer') {
+        document.getElementById('bottomChat').style.display = 'inline-block';
+        document.getElementById('bottomDonate').style.display = 'inline-block';
+      } else {
+        document.getElementById('bottomChat').style.display = 'none';
+        document.getElementById('bottomDonate').style.display = 'inline-block';
+        // but admin donate shouldn't open modal; keep action disabled
+        document.getElementById('bottomDonate').style.display = 'none';
+      }
+    }
+
+    /* Donation modal logic (only open on donate button click when in volunteer mode) */
+    const modalOverlay = document.getElementById('donationModal');
+    const customDonationInput = document.getElementById('customDonation');
+    const selectedDonationEl = document.getElementById('selectedDonation');
+    const donationAmountButtons = Array.from(document.querySelectorAll('[data-amount]'));
+    const cancelDonationBtn = document.getElementById('cancelDonation');
+    const confirmDonationBtn = document.getElementById('confirmDonation');
+    const closeDonationIcon = document.getElementById('closeDonation');
+
+    function openDonationModal() {
+      if (currentMode !== 'volunteer') return;
+      modalOverlay.classList.add('open');
+      modalOverlay.setAttribute('aria-hidden', 'false');
+      // default selection
+      selectedDonationAmount = mockProject.itemUnitPrice;
+      updateDonationUI();
+    }
+
+    function closeDonationModal() {
+      modalOverlay.classList.remove('open');
+      modalOverlay.setAttribute('aria-hidden', 'true');
+    }
+
+    donationAmountButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        donationAmountButtons.forEach(b => b.classList.remove('primary'));
+        btn.classList.add('primary');
+        selectedDonationAmount = Number(btn.getAttribute('data-amount'));
+        customDonationInput.value = '';
+        updateDonationUI();
+      });
+    });
+
+    customDonationInput.addEventListener('input', (e) => {
+      const v = parseFloat(e.target.value);
+      if (!isNaN(v) && v > 0) {
+        selectedDonationAmount = v;
+        donationAmountButtons.forEach(b => b.classList.remove('primary'));
+        updateDonationUI();
+      }
+    });
+
+    function updateDonationUI() {
+      selectedDonationEl.textContent = new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(selectedDonationAmount);
+    }
+
+    cancelDonationBtn.addEventListener('click', closeDonationModal);
+    closeDonationIcon.addEventListener('click', closeDonationModal);
+
+    confirmDonationBtn.addEventListener('click', () => {
+      alert(`Doação de ${new Intl.NumberFormat('pt-BR',{style:'currency',currency:'BRL'}).format(selectedDonationAmount)} registrada (simulado). Obrigado!`);
+      closeDonationModal();
+      // simulate update of project amounts (no backend)
+      mockProject.currentAmount += Number(selectedDonationAmount);
+      populateProjectInfo();
+    });
+
+    /* Confirm delete modal */
+    const confirmDeleteModal = document.getElementById('confirmDeleteModal');
+    const cancelDelete = document.getElementById('cancelDelete');
+    const confirmDelete = document.getElementById('confirmDelete');
+
+    function openConfirmDelete() {
+      confirmDeleteModal.style.display = 'flex';
+    }
+    function closeConfirmDelete() {
+      confirmDeleteModal.style.display = 'none';
+    }
+    cancelDelete.addEventListener('click', closeConfirmDelete);
+    confirmDelete.addEventListener('click', () => {
+      closeConfirmDelete();
+      alert('Projeto deletado com sucesso (simulação). Voltando à seleção.');
+      goBackToSelection();
+    });
+
+    /* Image carousel (simple) */
+    const imageDotsContainer = document.getElementById('imageDots');
+    function renderImageDots() {
+      imageDotsContainer.innerHTML = '';
+      mockProject.images.forEach((_, idx) => {
+        const dot = document.createElement('div');
+        dot.className = 'image-indicator';
+        if (idx === currentImageIndex) dot.classList.add('active');
+        dot.addEventListener('click', () => {
+          currentImageIndex = idx;
+          updateMainImage();
+        });
+        imageDotsContainer.appendChild(dot);
+      });
+      document.getElementById('imageCounter').textContent = `${currentImageIndex+1} / ${mockProject.images.length}`;
+    }
+
+    function updateMainImage() {
+      const img = document.getElementById('mainImage');
+      img.src = mockProject.images[currentImageIndex];
+      renderImageDots();
+    }
+
+    renderImageDots();
+
+    /* Keyboard ESC to close modals */
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeDonationModal();
+        closeConfirmDelete();
+      }
+    });
+
+    /* ensure modal is not visible on load */
+    closeDonationModal();
+    closeConfirmDelete();
+
+  </script>
+</body>
+</html>
